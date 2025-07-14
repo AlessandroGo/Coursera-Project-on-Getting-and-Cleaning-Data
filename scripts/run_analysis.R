@@ -59,7 +59,24 @@ merged_meaninful_df <- merged_mean_std %>%
                              )
 
 # This yields the final tidy grouped data set by averaging the mean and std for each variable per group
-# Note that the new data set now creates 
+# Note that the new data set now creates
+# This essentially creates a composite primary key for averaged set
+# Group_by is fairly simple, but syntax for summarise is important, notably see .groups = "drop" is important
+
 averaged_dataset <- merged_meaninful_df %>%
                     group_by(subject, activity) %>%
                     summarise(across(everything(), mean), .groups = "drop")
+
+# Note at the top I added a script to set working directory to this files location hence we go out of scripts '../'
+if (!dir.exists("../final_data")) {
+  dir.create("../final_data")
+}
+
+file_path <- "../final_data/tidy_dataset.csv"
+
+if (!file.exists(file_path)) {
+  write.csv(averaged_dataset, file_path, row.names = FALSE)
+} else {
+  message("File already exists — skipping write.")
+}
+
