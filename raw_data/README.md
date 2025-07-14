@@ -1,2 +1,1 @@
 Unzip data into this folder note don't leave UCI HAR data folder but rather keep files and sub folders here
-

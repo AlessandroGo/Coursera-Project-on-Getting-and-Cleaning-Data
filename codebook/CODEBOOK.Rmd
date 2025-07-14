@@ -2,6 +2,9 @@
 title: "CODEBOOK"
 output: html_document
 ---
+# Codebook
 
+## Dataset overview
+The final data set includes appropriate variable names that have been processed from features.txt to have descriptive names that are appropriate for coding conventions. So, 'fBodyGyro-mean()-X' transforms into f_body_gyro_mean_x 
 
 

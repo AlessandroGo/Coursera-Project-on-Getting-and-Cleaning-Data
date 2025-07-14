@@ -10,7 +10,8 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 feature_names <- fread("../raw_data/features.txt", col.names = c("idx", "feature"), stringsAsFactors = FALSE)$feature
 # Now clean up names of features
 # Lowercase variable names
-features_clean <- tolower(feature_names)
+features_clean <- gsub("([a-z])([A-Z])", "\\1_\\2", feature_names)
+features_clean <- tolower(features_clean)
 # Remove parenthesis in names
 features_clean <- gsub("[()]",  "",  features_clean) # gsub replaces all instances not just first
 features_clean <- gsub("-",     "_",  features_clean) # We have been using _ and that's pretty standard in programming not '-'
@@ -62,7 +63,6 @@ merged_meaninful_df <- merged_mean_std %>%
 # Note that the new data set now creates
 # This essentially creates a composite primary key for averaged set
 # Group_by is fairly simple, but syntax for summarise is important, notably see .groups = "drop" is important
-
 averaged_dataset <- merged_meaninful_df %>%
                     group_by(subject, activity) %>%
                     summarise(across(everything(), mean), .groups = "drop")
