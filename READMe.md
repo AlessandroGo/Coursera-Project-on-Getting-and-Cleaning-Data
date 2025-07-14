@@ -1,3 +1,7 @@
+# Overview of Project
+This is project is about getting and cleaning a dataset such that it is a tidy dataset. This means having descriptive variable and value names
+ensuring 1 observation per row, which is dealt with by summarising across the groups.
+
 # Project Layout
 
 <pre>
