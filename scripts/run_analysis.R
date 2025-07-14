@@ -17,6 +17,14 @@ features_clean <- gsub("[()]",  "",  features_clean) # gsub replaces all instanc
 features_clean <- gsub("-",     "_",  features_clean) # We have been using _ and that's pretty standard in programming not '-'
 features_clean <- gsub(",",     "",   features_clean)
 # input -> feature_names[[1]] tBodyAcc-mean()-X output -> tbodyacc_mean_x
+# Give the column a name
+features <- data.table(idx = 1:length(features_clean), name = features_clean)
+
+# Get indices based on original feature names (from uncleaned feature_names)
+mean_std_idx <- grep("mean\\(\\)|std\\(\\)", feature_names) # Looks complicated but just escaping '(' and ')' special character
+
+# Keep only those rows
+features_keep <- features[mean_std_idx]
 
 # Now to read in training data
 train_df <- data.table(
@@ -50,7 +58,7 @@ dim(merged_df)
 
 # Now to keep only mean and standard deviation of dataset
 merged_mean_std <- merged_df %>%
-  select(subject, activity, matches("(mean|std)_(x|y|z)$"))
+  select(subject, activity, all_of(features_keep$name))
 # Now going to give activity a meaningful label
 merged_meaninful_df <- merged_mean_std %>%
                       mutate(activity = factor(activity,
@@ -75,6 +83,7 @@ if (!dir.exists("../final_data")) {
 file_path <- "../final_data/tidy_dataset.csv"
 
 if (!file.exists(file_path)) {
+  # Need to use row.names = FALSE or there's an extra column of indices
   write.csv(averaged_dataset, file_path, row.names = FALSE)
 } else {
   message("File already exists — skipping write.")
